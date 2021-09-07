@@ -11,7 +11,7 @@ SCRIPT_FILE="${3}"
 START_INDEX="${4}"
 END_INDEX=$((START_INDEX + $5 - 1))
 
-SOLVER_DIR="/home/jt2chung/solvers/"
+SOLVER_DIR="/home/${USER}/solvers/"
 SOLVER_PATH="${SOLVER_DIR}/${SOLVER_NAME}"
 SCRIPT="${SOLVER_PATH} \"\${INSTANCE_NAME}\" > \"\${INSTANCE_NAME}.${SOLVER_NAME}.log\""
 
@@ -30,7 +30,6 @@ echo "#SBATCH --array=${START_INDEX}-${END_INDEX}"                             >
 echo "#SBATCH --exclude=gra[801-1325]"                                         >> "${SCRIPT_FILE}"
 echo ""                                                                        >> "${SCRIPT_FILE}"
 echo "echo \"Using node \${SLURMD_NODENAME} for job \${SLURM_ARRAY_TASK_ID}\"" >> "${SCRIPT_FILE}"
-echo "source /home/jt2chung/sat/bin/activate"                                  >> "${SCRIPT_FILE}"
 echo "INSTANCE_NAME=\`sed -n \${SLURM_ARRAY_TASK_ID}p ${INPUT_FILE}\`"         >> "${SCRIPT_FILE}"
 echo "timeout -s SIGINT 5000s ${SCRIPT}"                                       >> "${SCRIPT_FILE}"
 
