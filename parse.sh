@@ -63,8 +63,8 @@ parse_xmaplesat() {
 	LEARNT_LBD=(`grep "total lbd of learnts" ${LOG_FILE}`); LEARNT_LBD=${LEARNT_LBD[5]}
 	MEM_USED=(`grep "Memory used" ${LOG_FILE}`); MEM_USED=${MEM_USED[3]}
 	CPU_TIME=(`grep "CPU time" ${LOG_FILE}`); CPU_TIME=${CPU_TIME[3]}
-	ER0_TIME=(`grep "ER_add_heuristic time" ${LOG_FILE}`); ER0_TIME=${ER0_TIME[3]}
-	ER1_TIME=(`grep "ER_add_ds time" ${LOG_FILE}`); ER1_TIME=${ER1_TIME[3]}
+	ER0_TIME=(`grep "ER_sel time" ${LOG_FILE}`); ER0_TIME=${ER0_TIME[3]}
+	ER1_TIME=(`grep "ER_add time" ${LOG_FILE}`); ER1_TIME=${ER1_TIME[3]}
 	ER2_TIME=(`grep "ER_delC time" ${LOG_FILE}`); ER2_TIME=${ER2_TIME[3]}
 	ER3_TIME=(`grep "ER_delV time" ${LOG_FILE}`); ER3_TIME=${ER3_TIME[3]}
 	ER4_TIME=(`grep "ER_sub time" ${LOG_FILE}`); ER4_TIME=${ER4_TIME[3]}
