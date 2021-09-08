@@ -13,7 +13,17 @@ END_INDEX=$((START_INDEX + $5 - 1))
 
 SOLVER_DIR="/home/${USER}/solvers/"
 SOLVER_PATH="${SOLVER_DIR}/${SOLVER_NAME}"
-SCRIPT="${SOLVER_PATH} \"\${INSTANCE_NAME}\" > \"\${INSTANCE_NAME}.${SOLVER_NAME}.log\""
+
+# Set up solver-specific parameters
+SOLVER_PARAMS=""
+if [[ ${SOLVER_NAME} == xmaplesat_rnd_force0 || ${SOLVER_NAME} == xmaplesat_rnd_force1 ]]; then
+	SOLVER_PARAMS="-ext-freq=2000 -ext-wndw=100 -ext-num=1"
+elif [[ ${SOLVER_NAME} == xmaplesat_sub_force0 || ${SOLVER_NAME} == xmaplesat_sub_force1 ]]; then
+	SOLVER_PARAMS="-ext-freq=2000 -ext-wndw=100 -ext-num=10"
+fi
+
+# Generate command to execute
+SCRIPT="${SOLVER_PATH} ${SOLVER_PARAMS} \"\${INSTANCE_NAME}\" > \"\${INSTANCE_NAME}.${SOLVER_NAME}.log\""
 
 # Check that solver exists
 if [[ ! -f ${SOLVER_PATH} ]]; then
