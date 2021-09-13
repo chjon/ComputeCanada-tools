@@ -55,7 +55,7 @@ while read LINE_1 <&3; do
 	if [[ ${SAT_1} != ${SAT_2} ]]; then
 		if [[ ${SKIP_INDETERMINATE} == $TRUE ]]; then
 			echo "${i} ${SAT_1} ${SAT_2}"
-		elif [[ ${SAT_1} != INDETERMINATE && ${SAT_1} != UNKNOWN && ${SAT_2} != INDETERMINATE && ${SAT_2} != UNKNOWN ]]; then
+		elif [[ ${SAT_1} != INDETERMINATE && ${SAT_2} != INDETERMINATE ]]; then
 			echo "${i} ${SAT_1} ${SAT_2}"
 		fi
 	fi
