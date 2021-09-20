@@ -11,6 +11,13 @@ Usage:
   * `sat2019`: This benchmark is composed of all the Main-track instances from the 2019 SAT Competition. 
 * `<OUTPUT_DIR>`: The name of the output directory in which to store the downloaded instances.
 
+## `list_instances.sh`
+This script is used to list the absolute paths of all the problem instances in a directory. Its output can be used as the input file for `queueArrayJob.sh` and `parse.sh`.
+
+Usage:  
+`./list_instances.sh <INPUT_DIR>`
+* `<INPUT_DIR>`: The directory containing the problem instances. Instances can be in subdirectories of this input directory.
+
 ## `queueArrayJob.sh`
 This script is used to execute large numbers of SAT solver jobs using the "array job" functionality provided by the Slurm job queuing system. It generates a script for executing the job and queues it for execution using Slurm.
 
