@@ -18,7 +18,7 @@ SOLVER_PATH="${SOLVER_DIR}/${SOLVER_NAME}"
 SOLVER_PARAMS=""
 if [[ ${SOLVER_NAME} == xmaplesat* ]]; then
 	# Standard extension parameters
-	SOLVER_PARAMS="${SOLVER_PARAMS} -ext-freq=2000 -ext-wndw=100 -ext-sub-min-width=3 -ext-sub-max-width=100"
+	SOLVER_PARAMS="${SOLVER_PARAMS} -ext-freq=2000 -ext-wndw=50 -ext-sub-min-width=3 -ext-sub-max-width=100"
 	if [[ ${SOLVER_NAME} == *_rnd_* ]]; then
 		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-num=1"
 	elif [[ ${SOLVER_NAME} == *_sub_* ]]; then
@@ -26,18 +26,11 @@ if [[ ${SOLVER_NAME} == xmaplesat* ]]; then
 	fi
 
 	# Set up clause width range filter parameters
-	if [[ ${SOLVER_NAME} == *_rng_* ]]; then
-		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-min-width=3 -ext-max-width=100"
+	if [[ ${SOLVER_NAME} == *_rng ]]; then
+		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-min-width=3 -ext-max-width=7"
 
-	# Set up longest clause filter parameters
-	elif [[ ${SOLVER_NAME} == *_lng_* ]]; then
-		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-filter-num=200"
-	fi
-
-	# Set up LBD limits
-	if [[ ${SOLVER_NAME} == *_lbd0 ]]; then
-		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-min-lbd=0 -ext-max-lbd=2147483647"
-	elif [[ ${SOLVER_NAME} == *_lbd1 ]]; then
+	# Set up LBD limits filter parameters
+	elif [[ ${SOLVER_NAME} == *_lbd ]]; then
 		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-min-lbd=0 -ext-max-lbd=5"
 	fi
 fi
