@@ -18,7 +18,7 @@ SOLVER_PATH="${SOLVER_DIR}/${SOLVER_NAME}"
 SOLVER_PARAMS=""
 if [[ ${SOLVER_NAME} == xmaplesat* ]]; then
 	# Standard extension parameters
-	SOLVER_PARAMS="${SOLVER_PARAMS} -ext-freq=2000 -ext-wndw=50 -ext-sub-min-width=3 -ext-sub-max-width=100"
+	SOLVER_PARAMS="${SOLVER_PARAMS} -ext-freq=2000 -ext-wndw=50 -ext-sub-min-width=3 -ext-sub-max-width=7"
 	if [[ ${SOLVER_NAME} == *_rnd_* ]]; then
 		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-num=1"
 	elif [[ ${SOLVER_NAME} == *_sub_* ]]; then
@@ -36,7 +36,7 @@ if [[ ${SOLVER_NAME} == xmaplesat* ]]; then
 fi
 
 # Generate command to execute
-SCRIPT="${SOLVER_PATH} ${SOLVER_PARAMS} \"\${INSTANCE_NAME}\" > \"\${INSTANCE_NAME}.${SOLVER_NAME}.log\""
+SCRIPT="${SOLVER_PATH} ${SOLVER_PARAMS} \"\${INSTANCE_NAME}\" > \"\${INSTANCE_NAME}.${SOLVER_NAME}.log\" 2>&1"
 
 # Check that solver exists
 if [[ ! -f ${SOLVER_PATH} ]]; then
@@ -51,6 +51,8 @@ echo "#SBATCH --time=0:00:5050"                                                >
 echo "#SBATCH --mem=10G"                                                       >> "${SCRIPT_FILE}"
 echo "#SBATCH --array=${START_INDEX}-${END_INDEX}"                             >> "${SCRIPT_FILE}"
 echo "#SBATCH --exclude=gra[801-1325]"                                         >> "${SCRIPT_FILE}"
+echo "#SBATCH --output=output_${SOLVER_NAME}.%J.out"                           >> "${SCRIPT_FILE}"
+echo "#SBATCH --error=output_${SOLVER_NAME}.%J.err"                            >> "${SCRIPT_FILE}"
 echo ""                                                                        >> "${SCRIPT_FILE}"
 echo "echo \"Using node \${SLURMD_NODENAME} for job \${SLURM_ARRAY_TASK_ID}\"" >> "${SCRIPT_FILE}"
 echo "INSTANCE_NAME=\`sed -n \${SLURM_ARRAY_TASK_ID}p ${INPUT_FILE}\`"         >> "${SCRIPT_FILE}"
