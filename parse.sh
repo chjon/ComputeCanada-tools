@@ -162,7 +162,7 @@ parse_kissat() {
 # Select parse function
 if [[ ${SOLVER_NAME} == maplesat ]]; then
 	PARSE_FUNCTION="parse_maplesat"
-elif [[ ${SOLVER_NAME} == xmaplesat* ]]; then
+elif [[ ${SOLVER_NAME} == xmaplesat* ]] || [[ ${SOLVER_NAME} == glucoser ]]; then
 	PARSE_FUNCTION="parse_xmaplesat"
 elif [[ ${SOLVER_NAME} == maplelcm ]]; then
 	PARSE_FUNCTION="parse_maplelcm"
