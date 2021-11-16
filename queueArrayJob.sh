@@ -16,7 +16,7 @@ SOLVER_PATH="${SOLVER_DIR}/${SOLVER_NAME}"
 
 # Set up solver-specific parameters
 SOLVER_PARAMS=""
-if [[ ${SOLVER_NAME} == xmaplesat* ]]; then
+if [[ ${SOLVER_NAME} == xmaplesat* ]] || [[ ${SOLVER_NAME} == glucoser* ]]; then
 	# Standard extension parameters
 	SOLVER_PARAMS="${SOLVER_PARAMS} -ext-freq=2000 -ext-wndw=50 -ext-sub-min-width=3 -ext-sub-max-width=7"
 	if [[ ${SOLVER_NAME} == *_rnd_* ]]; then
@@ -32,6 +32,13 @@ if [[ ${SOLVER_NAME} == xmaplesat* ]]; then
 	# Set up LBD limits filter parameters
 	elif [[ ${SOLVER_NAME} == *_lbd ]]; then
 		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-min-lbd=0 -ext-max-lbd=5"
+	fi
+
+	# Set up variable deletion heuristics
+	if [[ ${SOLVER_NAME} == *_dcnst ]]; then
+		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-act-thresh=50"
+	elif [[ ${SOLVER_NAME} == *_dfrac ]]; then
+		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-act-thresh=0.5"
 	fi
 fi
 
