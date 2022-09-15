@@ -16,9 +16,9 @@ SOLVER_PATH="${SOLVER_DIR}/${SOLVER_NAME}"
 
 # Set up solver-specific parameters
 SOLVER_PARAMS=""
-if [[ ${SOLVER_NAME} == xmaplesat* ]] || [[ ${SOLVER_NAME} == glucoser* ]]; then
+if [[ ${SOLVER_NAME} == xmaple* ]]; then
 	# Standard extension parameters
-	SOLVER_PARAMS="${SOLVER_PARAMS} -ext-freq=2000 -ext-wndw=50 -ext-sub-min-width=3 -ext-sub-max-width=7"
+	SOLVER_PARAMS="${SOLVER_PARAMS} -ext-freq=2000 -ext-wndw=100 -ext-sub-min-width=3 -ext-sub-max-width=7 -ext-sign"
 	if [[ ${SOLVER_NAME} == *_rnd_* ]]; then
 		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-num=1"
 	elif [[ ${SOLVER_NAME} == *_sub_* ]]; then
@@ -32,13 +32,6 @@ if [[ ${SOLVER_NAME} == xmaplesat* ]] || [[ ${SOLVER_NAME} == glucoser* ]]; then
 	# Set up LBD limits filter parameters
 	elif [[ ${SOLVER_NAME} == *_lbd ]]; then
 		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-min-lbd=0 -ext-max-lbd=5"
-	fi
-
-	# Set up variable deletion heuristics
-	if [[ ${SOLVER_NAME} == *_dcnst ]]; then
-		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-act-thresh=50"
-	elif [[ ${SOLVER_NAME} == *_dfrac ]]; then
-		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-act-thresh=0.5"
 	fi
 fi
 
@@ -57,13 +50,13 @@ echo "#SBATCH --account=def-vganesh"                                           >
 echo "#SBATCH --time=0:00:5050"                                                >> "${SCRIPT_FILE}"
 echo "#SBATCH --mem=10G"                                                       >> "${SCRIPT_FILE}"
 echo "#SBATCH --array=${START_INDEX}-${END_INDEX}"                             >> "${SCRIPT_FILE}"
-echo "#SBATCH --exclude=gra[801-1325]"                                         >> "${SCRIPT_FILE}"
+echo "#SBATCH --exclude=gra[801-1043]"                                         >> "${SCRIPT_FILE}"
 echo "#SBATCH --output=output_${SOLVER_NAME}.%a.out"                           >> "${SCRIPT_FILE}"
 echo "#SBATCH --error=output_${SOLVER_NAME}.%a.err"                            >> "${SCRIPT_FILE}"
 echo ""                                                                        >> "${SCRIPT_FILE}"
 echo "echo \"Using node \${SLURMD_NODENAME} for job \${SLURM_ARRAY_TASK_ID}\"" >> "${SCRIPT_FILE}"
 echo "INSTANCE_NAME=\`sed -n \${SLURM_ARRAY_TASK_ID}p ${INPUT_FILE}\`"         >> "${SCRIPT_FILE}"
-echo "timeout -s SIGINT 5000s ${SCRIPT}"                                       >> "${SCRIPT_FILE}"
+echo "time (timeout -s SIGINT 5000s ${SCRIPT})"                                >> "${SCRIPT_FILE}"
 
 # Queue script
 sbatch ${SCRIPT_FILE}
