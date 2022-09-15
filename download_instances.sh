@@ -24,8 +24,7 @@ if [[ ${BENCHMARK} == agile ]]; then
 	mv ./Agile ${OUTPUT_DIR} && \
 	echo "Decompressing files..." && \
 	cd ${OUTPUT_DIR} && \
-	bunzip2 *.bz2 && \
-	;
+	bunzip2 *.bz2
 	
 # Download SAT 2019 benchmark
 elif [[ ${BENCHMARK} == sat2019 ]]; then
@@ -39,8 +38,57 @@ elif [[ ${BENCHMARK} == sat2019 ]]; then
 	rm -rf ./sr2019 && \
 	echo "Decompressing files..." && \
 	cd ${OUTPUT_DIR} && \
-	unxz *.xz && \
-	;
+	unxz *.xz
+
+# Download SAT 2020 benchmark
+elif [[ ${BENCHMARK} == sat2020 ]]; then
+	mkdir ${OUTPUT_DIR}	
+	cd ${OUTPUT_DIR}
+
+	echo "Downloading..."
+	wget https://satcompetition.github.io/2020/downloads/sc2020-main.uri
+	for line in $(cat sc2020-main.uri); do
+		curl -O -J -L ${line}
+	done
+	rm sc2020-main.uri
+
+# Generate random 3-CNF and 5-CNF benchmarks
+elif [[ ${BENCHMARK} == random ]]; then
+	mkdir ${OUTPUT_DIR}
+	source ~/sat2/bin/activate
+
+	# Note: starting values of n are chosen such that the maximum number of possible clauses allows the hardness threshold to be met
+	
+	# Each clause uses k variables, so for n variables, the number of possible clauses is: choose(n, k) * 2^k
+	# We require m / n >= THRESHOLD, so:
+	# choose(n, k) >= THRESHOLD * n
+
+
+	# 3-CNF
+	echo "Generating 3-CNFs"
+	K=3
+	THRESHOLD=4.26
+	for ((n=100;n<=500;n+=25)); do
+		m=$(printf "%.0f" $(bc -l <<< "${n} * ${THRESHOLD}"))
+		echo "n=${n}, m=${m}"
+		for ((i=0;i<10;i++)); do
+			cnfgen randkcnf ${K} ${n} ${m} > ${OUTPUT_DIR}/rand3_${n}_${m}_${i}.cnf
+		done
+	done
+
+	# 5-CNF
+	echo "Generating 5-CNFs"
+	K=5
+	THRESHOLD=21.12
+	for ((n=100;n<=500;n+=25)); do
+		m=$(printf "%.0f" $(bc -l <<< "${n} * ${THRESHOLD}"))
+		echo "n=${n}, m=${m}"
+		for ((i=0;i<10;i++)); do
+			cnfgen randkcnf ${K} ${n} ${m} > ${OUTPUT_DIR}/rand5_${n}_${m}_${i}.cnf
+		done
+	done
+
+	deactivate
 
 else
 	echo "Benchmark '${BENCHMARK}' is not supported!"
