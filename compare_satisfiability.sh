@@ -1,12 +1,13 @@
 # Input validation
-if [[ $# -ne 2 ]]; then
-	echo "Usage: $0 <PARSED_FILE_1> <PARSED_FILE_2>"
+if [[ $# -lt 2 ]] || [[ $# -gt 3 ]]; then
+	echo "Usage: $0 <PARSED_FILE_1> <PARSED_FILE_2> [INSTANCE_FILE]"
 	exit -1
 fi
 
 # Set up parameters
 FILE_1="${1}"
 FILE_2="${2}"
+INSTANCE_FILE="${3}"
 TRUE="true"
 SKIP_INDETERMINATE="false"
 
@@ -52,11 +53,16 @@ while read LINE_1 <&3; do
 	SAT_1=${LINE_1##*,}
 	SAT_2=${LINE_2##*,}
 
+	COL_1=${i}
+	if [[ -n ${INSTANCE_FILE} ]]; then
+		COL_1=$(sed "$((i + 1))p;d" "${INSTANCE_FILE}")
+	fi
+
 	if [[ ${SAT_1} != ${SAT_2} ]]; then
 		if [[ ${SKIP_INDETERMINATE} == $TRUE ]]; then
-			echo "${i} ${SAT_1} ${SAT_2}"
+			echo "${COL_1},${SAT_1},${SAT_2}"
 		elif [[ ${SAT_1} != INDETERMINATE && ${SAT_2} != INDETERMINATE ]]; then
-			echo "${i} ${SAT_1} ${SAT_2}"
+			echo "${COL_1},${SAT_1},${SAT_2}"
 		fi
 	fi
 
