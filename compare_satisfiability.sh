@@ -32,13 +32,30 @@ if [[ ${FILE_1_LENGTH} -ne ${FILE_2_LENGTH} ]]; then
 	exit -1
 fi
 
+if [[ -n ${INSTANCE_FILE} ]]; then
+	check_file_exists ${INSTANCE_FILE}
+	INSTANCE_FILE_LENGTH=($(wc -l ${INSTANCE_FILE})); INSTANCE_FILE_LENGTH=${INSTANCE_FILE_LENGTH[0]}
+	
+	if [[ ${FILE_1_LENGTH} -gt ${INSTANCE_FILE_LENGTH} ]]; then
+		echo "Instance file is shorter than parsed file (${INSTANCE_FILE_LENGTH} < ${FILE_1_LENGTH})"
+		exit -1
+	fi
+fi
+
 # Read files
 i=0
 exec 3<"${FILE_1}"
 exec 4<"${FILE_2}"
 
+if [[ -n ${INSTANCE_FILE} ]]; then
+	exec 5<"${INSTANCE_FILE}"
+fi
+
 while read LINE_1 <&3; do
 	read LINE_2 <&4
+	if [[ -n ${INSTANCE_FILE} ]]; then
+		read LINE_3 <& 5
+	fi
 	
 	# Ensure that the lines compare the same CNF
 	CNF_1=${LINE_1#*,}; CNF_1=${CNF_1%%,*}
@@ -53,18 +70,20 @@ while read LINE_1 <&3; do
 	SAT_1=${LINE_1##*,}
 	SAT_2=${LINE_2##*,}
 
-	COL_1=${i}
-	if [[ -n ${INSTANCE_FILE} ]]; then
-		COL_1=$(sed "$((i + 1))p;d" "${INSTANCE_FILE}")
-	fi
-
+	i=$((i + 1))
 	if [[ ${SAT_1} != ${SAT_2} ]]; then
 		if [[ ${SKIP_INDETERMINATE} == $TRUE ]]; then
-			echo "${COL_1},${SAT_1},${SAT_2}"
+			if [[ -n ${INSTANCE_FILE} ]]; then
+				echo "${LINE_3}"
+			else
+				echo "${i},${SAT_1},${SAT_2}"
+			fi
 		elif [[ ${SAT_1} != INDETERMINATE && ${SAT_2} != INDETERMINATE ]]; then
-			echo "${COL_1},${SAT_1},${SAT_2}"
+			if [[ -n ${INSTANCE_FILE} ]]; then
+				echo "${LINE_3}"
+			else
+				echo "${i},${SAT_1},${SAT_2}"
+			fi
 		fi
 	fi
-
-	i=$((i + 1))
 done
