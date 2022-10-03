@@ -83,8 +83,8 @@ parse_xmaplesat() {
 	ER3_TIME=(`grep "ER_delV time" ${LOG_FILE}`); ER3_TIME=${ER3_TIME[3]}
 	ER4_TIME=(`grep "ER_sub time" ${LOG_FILE}`); ER4_TIME=${ER4_TIME[3]}
 	ER5_TIME=(`grep "ER_stat time" ${LOG_FILE}`); ER5_TIME=${ER5_TIME[3]}
-	SATISFIABILITY=`tail -n 1 ${LOG_FILE}`
-
+	SATISFIABILITY=(`grep "^s " ${LOG_FILE}`); SATISFIABILITY=${SATISFIABILITY[1]}
+	
 	# Normalize reported satisfiability values
 	if [[ ${SATISFIABILITY} != ${GLOBAL_SAT} && ${SATISFIABILITY} != ${GLOBAL_UNSAT} ]]; then
 		SATISFIABILITY=${GLOBAL_INDET}
@@ -137,7 +137,7 @@ parse_xmaplelcm() {
 	CONF_LITS=(`grep "c conflict literals" ${LOG_FILE}`); CONF_LITS=${CONF_LITS[4]}
 	TOTAL_EXT_VARS=(`grep "c total ext vars" ${LOG_FILE}`); TOTAL_EXT_VARS=${TOTAL_EXT_VARS[5]}
 	DELETED_EXT_VARS=(`grep "c deleted ext vars" ${LOG_FILE}`); DELETED_EXT_VARS=${DELETED_EXT_VARS[5]}
-	MAX_EXT_VARS=(`grep "c max ext vars" ${LOG_FILE}`); MAX_EXT_VARS=${MAX_EXT_VARS_VARS[5]}
+	MAX_EXT_VARS=(`grep "c max ext vars" ${LOG_FILE}`); MAX_EXT_VARS=${MAX_EXT_VARS[5]}
 	EXT_DECISIONS=(`grep "c decisions on ext vars" ${LOG_FILE}`); EXT_DECISIONS=${EXT_DECISIONS[6]}
 	CONF_EXT_CLAUSES=(`grep "c conflict ext clauses" ${LOG_FILE}`); CONF_EXT_CLAUSES=${CONF_EXT_CLAUSES[5]}
 	LEARNT_EXT_CLAUSES=(`grep "c learnt ext clauses" ${LOG_FILE}`); LEARNT_EXT_CLAUSES=${LEARNT_EXT_CLAUSES[5]}
