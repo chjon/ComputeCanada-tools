@@ -25,7 +25,18 @@ if [[ ${BENCHMARK} == agile ]]; then
 	echo "Decompressing files..." && \
 	cd ${OUTPUT_DIR} && \
 	bunzip2 *.bz2
-	
+
+# Download SAT 2002 benchmark
+elif [[ ${BENCHMARK} == sat2002 ]]; then
+	echo "Downloading..." && \	
+	wget https://www.cs.ubc.ca/~hoos/SATLIB/Benchmarks/SAT/New/Competition-02/sat-2002-beta.tgz && \
+	echo "Unzipping archive..." && \
+	gunzip sat-2002-beta.tgz && \
+	echo "Decompressing files..." && \
+	tar -xvf sat-2002-beta.tar && \
+	mv ./sat-2002-beta ${OUTPUT_DIR} && \
+	rm sat-2022-beta.tar
+
 # Download SAT 2019 benchmark
 elif [[ ${BENCHMARK} == sat2019 ]]; then
 	echo "Downloading..." && \
@@ -90,6 +101,28 @@ elif [[ ${BENCHMARK} == random ]]; then
 
 	deactivate
 
+# Generate PHP benchmarks
+elif [[ ${BENCHMARK} == php ]]; then
+	mkdir ${OUTPUT_DIR} ${OUTPUT_DIR}/php ${OUTPUT_DIR}/fphp ${OUTPUT_DIR}/xphp ${OUTPUT_DIR}/xphp_lvl
+	
+	MIN_HOLES=4
+	MAX_HOLES=25
+
+	echo "Generating PHP instances"
+	for ((i=${MIN_HOLES};i<=${MAX_HOLES};i++)); do
+		NUM_PIGEONS=$((i + 1))
+		NUM_HOLES=${i}
+		
+		# Generate normal PHP instances
+		python ~/generators/generate_PHP.py ${NUM_PIGEONS} ${NUM_HOLES} 0 0 0 >> ${OUTPUT_DIR}/php/php_${NUM_PIGEONS}_${NUM_HOLES}.cnf
+		
+		# Generate functional PHP instances
+		python ~/generators/generate_PHP.py ${NUM_PIGEONS} ${NUM_HOLES} 1 0 0 >> ${OUTPUT_DIR}/fphp/fphp_${NUM_PIGEONS}_${NUM_HOLES}.cnf
+
+		# Generate normal PHP instances with extension variables included
+		python ~/generators/generate_PHP.py ${NUM_PIGEONS} ${NUM_HOLES} 0 1 1 >> ${OUTPUT_DIR}/xphp/xphp1_${NUM_PIGEONS}_${NUM_HOLES}.cnf
+		python ~/generators/generate_PHP.py ${NUM_PIGEONS} ${NUM_HOLES} 0 2 1 >> ${OUTPUT_DIR}/xphp/xphp2_${NUM_PIGEONS}_${NUM_HOLES}.cnf	
+	done
 else
 	echo "Benchmark '${BENCHMARK}' is not supported!"
 	exit 1
