@@ -57,11 +57,11 @@ elif [[ ${BENCHMARK} == sat2020 ]]; then
 	cd ${OUTPUT_DIR}
 
 	echo "Downloading..."
-	wget https://satcompetition.github.io/2020/downloads/sc2020-main.uri
-	for line in $(cat sc2020-main.uri); do
-		curl -O -J -L ${line}
-	done
-	rm sc2020-main.uri
+	wget https://satcompetition.github.io/2020/downloads/sc2020-main.uri && \
+	wget --content-disposition -i sc2020-main.uri && \
+	rm sc2020-main.uri && \
+	echo "Decompressing files..." && \
+	unxz *.xz
 
 # Generate random 3-CNF and 5-CNF benchmarks
 elif [[ ${BENCHMARK} == random ]]; then
