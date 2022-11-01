@@ -37,6 +37,20 @@ elif [[ ${BENCHMARK} == sat2002 ]]; then
 	mv ./sat-2002-beta ${OUTPUT_DIR} && \
 	rm sat-2022-beta.tar
 
+# Download SAT 2003 benchmark
+elif [[ ${BENCHMARK} == sat2003 ]]; then
+	echo "Downloading..." && \	
+	wget https://www.cs.ubc.ca/~hoos/SATLIB/Benchmarks/SAT/New/Competition-03/distrib-shuffled.tar.bz2 && \
+	mv ./distrib-shuffled.tar.bz2 ${OUTPUT_DIR} && \
+	echo "Unzipping archive..." && \
+	cd ${OUTPUT_DIR} && \
+	bunzip2 distrib-shuffled.tar.bz2 && \
+	echo "Extracting archive..." && \
+	tar -xvf distrib-shuffled.tar && \
+	rm distrib-shuffled.tar && \
+	echo "Decompressing files..." && \
+	find . -name "*.gz" -exec gunzip {} \;
+
 # Download SAT 2019 benchmark
 elif [[ ${BENCHMARK} == sat2019 ]]; then
 	echo "Downloading..." && \
