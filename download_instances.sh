@@ -103,7 +103,7 @@ elif [[ ${BENCHMARK} == random ]]; then
 
 # Generate PHP benchmarks
 elif [[ ${BENCHMARK} == php ]]; then
-	mkdir ${OUTPUT_DIR} ${OUTPUT_DIR}/php ${OUTPUT_DIR}/fphp ${OUTPUT_DIR}/xphp ${OUTPUT_DIR}/xphp_lvl
+	mkdir ${OUTPUT_DIR} ${OUTPUT_DIR}/php ${OUTPUT_DIR}/fphp ${OUTPUT_DIR}/xphp
 	
 	MIN_HOLES=4
 	MAX_HOLES=25
