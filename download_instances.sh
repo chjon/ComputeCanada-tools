@@ -139,6 +139,32 @@ elif [[ ${BENCHMARK} == random ]]; then
 
 	deactivate
 
+# Generate hash function inversion benchmarks
+elif [[ ${BENCHMARK} == crypto ]]; then
+	mkdir ${OUTPUT_DIR} ${OUTPUT_DIR}/sha1 ${OUTPUT_DIR}/sha256
+
+	GENERATOR=~/SAT-encoding/crypto
+
+	echo "Generating SHA-1 inversion instances"
+	MIN_ROUNDS=18
+	MAX_ROUNDS=22
+	NUM_INSTANCES=5
+	for ((i=${MIN_ROUNDS};i<=${MAX_ROUNDS};i++)); do
+		for ((j=0;j<${NUM_INSTANCES};j++)); do
+			${GENERATOR} --function sha1 --rounds ${i} --target random > ${OUTPUT_DIR}/sha1/sha1_${i}_preimage_${j}.cnf
+		done
+	done
+	
+	echo "Generating SHA-256 inversion instances"
+	MIN_ROUNDS=18
+	MAX_ROUNDS=22
+	NUM_INSTANCES=5
+	for ((i=${MIN_ROUNDS};i<=${MAX_ROUNDS};i++)); do
+		for ((j=0;j<${NUM_INSTANCES};j++)); do
+			${GENERATOR} --function sha256 --rounds ${i} --target random > ${OUTPUT_DIR}/sha256/sha256_${i}_preimage_${j}.cnf
+		done
+	done
+
 # Generate PHP benchmarks
 elif [[ ${BENCHMARK} == php ]]; then
 	mkdir ${OUTPUT_DIR} ${OUTPUT_DIR}/php ${OUTPUT_DIR}/fphp ${OUTPUT_DIR}/xphp
