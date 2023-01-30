@@ -23,20 +23,26 @@ if [[ ${SOLVER_NAME} == xmaple* ]]; then
 	fi
 
 	# Set up clause width range filter parameters
-	if [[ ${SOLVER_NAME} == *_rng ]]; then
+	if [[ ${SOLVER_NAME} == *_rng* ]]; then
 		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-min-width=3 -ext-max-width=7"
 
 	# Set up LBD limits filter parameters
-	elif [[ ${SOLVER_NAME} == *_lbd ]]; then
+	elif [[ ${SOLVER_NAME} == *_lbd* ]]; then
 		SOLVER_PARAMS="${SOLVER_PARAMS} -ext-min-lbd=0 -ext-max-lbd=5"
 	fi
 elif [[ ${SOLVER_NAME} == maplesdcl* ]]; then
-	SOLVER_PARAMS="${SOLVER_PARAMS} -SDCL-mode -SDCL-nof-children=1 -SDCL-frequency=1 -SDCL-width-lower=6 -SDCL-width-upper=10 -cpu-lim=5000"
+	SOLVER_PARAMS="${SOLVER_PARAMS} -SDCL-mode -SDCL-width-lower=6 -SDCL-width-upper=10 -cpu-lim=5000"
 
-	if [[ ${SOLVER_NAME} == *_seq ]]; then
-		SOLVER_PARAMS="${SOLVER_PARAMS} -SDCL-mode-seq"
+	if [[ ${SOLVER_NAME} == *_rnd ]]; then
+		SOLVER_PARAMS="${SOLVER_PARAMS} -SDCL-frequency=1 -SDCL-mode-seq -SDCL-restart-probability=0.05"
+	else
+		if [[ ${SOLVER_NAME} == *_seq ]]; then
+			SOLVER_PARAMS="${SOLVER_PARAMS} -SDCL-frequency=1 -SDCL-mode-seq"
+		else
+			SOLVER_PARAMS="${SOLVER_PARAMS} -SDCL-frequency=1 -SDCL-nof-children=1"
+		fi
+		SOLVER_NAME="maplesdcl"
 	fi
-	SOLVER_NAME="maplesdcl"
 fi
 
 # Check that solver exists
