@@ -143,7 +143,7 @@ elif [[ ${BENCHMARK} == random ]]; then
 elif [[ ${BENCHMARK} == crypto ]]; then
 	mkdir ${OUTPUT_DIR} ${OUTPUT_DIR}/sha1 ${OUTPUT_DIR}/sha256
 
-	GENERATOR=~/SAT-encoding/crypto
+	GENERATOR=~/SAT-encoding/crypto/main
 
 	echo "Generating SHA-1 inversion instances"
 	MIN_ROUNDS=18
