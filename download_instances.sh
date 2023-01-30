@@ -144,14 +144,17 @@ elif [[ ${BENCHMARK} == crypto ]]; then
 	mkdir ${OUTPUT_DIR} ${OUTPUT_DIR}/sha1 ${OUTPUT_DIR}/sha256
 
 	GENERATOR=~/SAT-encoding/crypto/main
+	ADDERS=(two_operand counter_chain dot_matrix)
 
 	echo "Generating SHA-1 inversion instances"
 	MIN_ROUNDS=18
 	MAX_ROUNDS=22
 	NUM_INSTANCES=5
 	for ((i=${MIN_ROUNDS};i<=${MAX_ROUNDS};i++)); do
-		for ((j=0;j<${NUM_INSTANCES};j++)); do
-			${GENERATOR} --function sha1 --rounds ${i} --target random > ${OUTPUT_DIR}/sha1/sha1_${i}_preimage_${j}.cnf
+		for ADDER in ADDERS; do
+			for ((j=0;j<${NUM_INSTANCES};j++)); do
+				${GENERATOR} --function sha1 --rounds ${i} --target random --adder_type ${ADDER} > ${OUTPUT_DIR}/sha1/preimg_${i}_${ADDER}_${j}.cnf
+			done
 		done
 	done
 	
@@ -160,8 +163,10 @@ elif [[ ${BENCHMARK} == crypto ]]; then
 	MAX_ROUNDS=22
 	NUM_INSTANCES=5
 	for ((i=${MIN_ROUNDS};i<=${MAX_ROUNDS};i++)); do
-		for ((j=0;j<${NUM_INSTANCES};j++)); do
-			${GENERATOR} --function sha256 --rounds ${i} --target random > ${OUTPUT_DIR}/sha256/sha256_${i}_preimage_${j}.cnf
+		for ADDER in ADDERS; do
+			for ((j=0;j<${NUM_INSTANCES};j++)); do
+				${GENERATOR} --function sha256 --rounds ${i} --target random --adder_type ${ADDER} > ${OUTPUT_DIR}/sha256/preimg_${i}_${ADDER}_${j}.cnf
+			done
 		done
 	done
 
