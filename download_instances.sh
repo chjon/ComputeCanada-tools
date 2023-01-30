@@ -151,7 +151,7 @@ elif [[ ${BENCHMARK} == crypto ]]; then
 	MAX_ROUNDS=22
 	NUM_INSTANCES=5
 	for ((i=${MIN_ROUNDS};i<=${MAX_ROUNDS};i++)); do
-		for ADDER in ADDERS; do
+		for ADDER in ${ADDERS}; do
 			for ((j=0;j<${NUM_INSTANCES};j++)); do
 				${GENERATOR} --function sha1 --rounds ${i} --target random --adder_type ${ADDER} > ${OUTPUT_DIR}/sha1/preimg_${i}_${ADDER}_${j}.cnf
 			done
@@ -163,7 +163,7 @@ elif [[ ${BENCHMARK} == crypto ]]; then
 	MAX_ROUNDS=22
 	NUM_INSTANCES=5
 	for ((i=${MIN_ROUNDS};i<=${MAX_ROUNDS};i++)); do
-		for ADDER in ADDERS; do
+		for ADDER in ${ADDERS}; do
 			for ((j=0;j<${NUM_INSTANCES};j++)); do
 				${GENERATOR} --function sha256 --rounds ${i} --target random --adder_type ${ADDER} > ${OUTPUT_DIR}/sha256/preimg_${i}_${ADDER}_${j}.cnf
 			done
