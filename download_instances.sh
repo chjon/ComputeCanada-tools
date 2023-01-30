@@ -77,6 +77,30 @@ elif [[ ${BENCHMARK} == sat2020 ]]; then
 	echo "Decompressing files..." && \
 	unxz *.xz
 
+# Download SAT 2021 benchmark
+elif [[ ${BENCHMARK} == sat2021 ]]; then
+	mkdir ${OUTPUT_DIR}
+	cd ${OUTPUT_DIR}
+
+	echo "Downloading..."
+	wget https://satcompetition.github.io/2021/downloads/main2021.url && \
+	wget --content-disposition -i main2021.url && \
+	rm main2021.url && \
+	echo "Decompressing files..." && \
+	unxz *.xz
+
+# Download SAT 2022 benchmark
+elif [[ ${BENCHMARK} == sat2022 ]]; then
+	mkdir ${OUTPUT_DIR}
+	cd ${OUTPUT_DIR}
+
+	echo "Downloading..."
+	wget -O track_main_2022.uri https://gbd.iti.kit.edu/getinstances?track=main_2022 && \
+	wget --content-disposition -i track_main_2022.uri && \
+	rm track_main_2022.uri && \
+	echo "Decompressing files..." && \
+	unxz *.xz
+
 # Generate random 3-CNF and 5-CNF benchmarks
 elif [[ ${BENCHMARK} == random ]]; then
 	mkdir ${OUTPUT_DIR}
