@@ -56,8 +56,8 @@ if __name__ == '__main__':
         exit(1)
 
     num_files = int(sys.argv[4])
-    if num_files < 1 or num_files > len(instances) - start_index:
-        print(f"Expected num files to be between {1} and {len(instances) - start_index}")
+    if num_files < 1 or num_files > len(instances) - start_index + 1:
+        print(f"Expected num files to be between {1} and {len(instances) - start_index + 1}")
         exit(1)
     end_index = start_index + num_files
     instances = instances[start_index:end_index]
